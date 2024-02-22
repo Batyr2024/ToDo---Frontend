@@ -22,13 +22,12 @@ body {
     font-family: Verdana, Arial, sans-serif;
     font-size: 16px;
   }
-ul{
+ulStyle{
     display: inline-block;
     margin: 10px auto;
     border: 2px solid #eee;
     padding: 10px 20px;
     font-family: Verdana, Arial, sans-serif;
-    font-size: 20px;
-
+    font-size: 16px;
 }
   
