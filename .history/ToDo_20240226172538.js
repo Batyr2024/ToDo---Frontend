@@ -43,7 +43,6 @@ taskDeleted.addEventListener("click" , function(){
         arrayTask.forEach((element, i) => {
         if(arrayTask[i].isChecked===false){
             arrayTask[i].isChecked=true;
-            
 
         }
         else{

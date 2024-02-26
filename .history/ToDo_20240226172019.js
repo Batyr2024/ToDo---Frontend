@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const listItem = document.createElement("li");
             listItem.innerHTML = `
-                <input class="checkbox" name="taskCheckbox" id=${idarr} type ="checkbox"></span>
+                <input class="checkbox" checked="on" name="taskCheckbox" id=${idarr} type ="checkbox"></span>
                 <span>${taskText}</span>
                 <span class="delete">X</span>
                 
@@ -43,7 +43,6 @@ taskDeleted.addEventListener("click" , function(){
         arrayTask.forEach((element, i) => {
         if(arrayTask[i].isChecked===false){
             arrayTask[i].isChecked=true;
-            
 
         }
         else{

@@ -34,21 +34,16 @@ li {
     align-items: center;
     padding: 8px 0;
 }
-h2{
-  margin: 2px;
-  align-self:center;
-}
   .delete{
     color:red;
     cursor: pointer;
     margin: 10px;
   }
-.checkbox{
-  margin: 2px;
-    align-items: center;
+checkbox{
+    align-items: self-start;
     cursor: pointer;
   }
-.taskDeleted{
+.buttondel{
   display: inline-block;
     margin: 1px auto;
     border: 2px solid #b10e0e;

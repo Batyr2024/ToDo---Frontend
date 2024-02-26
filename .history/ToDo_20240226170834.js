@@ -39,18 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
 taskDeleted.addEventListener("click" , function(){
 
 });
-    checkboxSelectAll.addEventListener("click" , function(){
-        arrayTask.forEach((element, i) => {
-        if(arrayTask[i].isChecked===false){
-            arrayTask[i].isChecked=true;
-            
-
+    checkboxSelectAll.addEventListener("" , function(){
+        arrayTask.forEach(element => {
+        if(arrayTask.isChecked==false){
+            arrayTask.isChecked=true;
         }
         else{
-            arrayTask[i].isChecked=false;
+            arrayTask.isChecked=false;
         }
-
-            alert(arrayTask[i].isChecked);
+            alert(arrayTask.isChecked);
         
 
         });

@@ -10,19 +10,22 @@
   <body>
     <script src="./ToDo.js"></script>
     
-      <div class="container" style="margin: auto;">
-          <h2 class="todo__caption">To Do App JS</h2>
+      <div class="container" style="width: 400px; margin: auto;">
+        <div class="row">
+         <h2 class="todo__caption">To Do App JS</h2>
+         <div class="col">
           <input type="text" id="taskInput" placeholder="Add a Task">
           <button id="addTask">Add</button>
-          <button id="taskDeleted">Deleted</button>
-          <h2>Select All</h2>
-          <input type="checkbox" id="checkboxSelectAll" class="checkbox">
-          <ul id="taskList"></ul>
-          <div class="container">
-            <h2>All</h2>
+         </div>
+         <div class="row">
+          <div class="col">
+            <ul id="taskList">
+            </ul>
           </div>
+          </div>
+        </div>
+        <button class="buttonsticky">Deleted</button>
       </div>
-      
       
   </body>
 </html>

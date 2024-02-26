@@ -40,16 +40,13 @@ taskDeleted.addEventListener("click" , function(){
 
 });
     checkboxSelectAll.addEventListener("click" , function(){
-        arrayTask.forEach((element, i) => {
+        arrayTask.forEach(element, i => {
         if(arrayTask[i].isChecked===false){
             arrayTask[i].isChecked=true;
-            
-
         }
         else{
             arrayTask[i].isChecked=false;
         }
-
             alert(arrayTask[i].isChecked);
         
 

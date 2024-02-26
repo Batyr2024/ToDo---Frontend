@@ -15,12 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: taskText,
                 isChecked:false
             });
-            let idarr = arrayTask[arrayTask.length-1].id;
-            
 
             const listItem = document.createElement("li");
             listItem.innerHTML = `
-                <input class="checkbox" name="taskCheckbox" id=${idarr} type ="checkbox"></span>
+                <input class="checkbox" name="taskCheckbox" id=${arrayTask[length-1].id} type ="checkbox"></span>
                 <span>${taskText}</span>
                 <span class="delete">X</span>
                 
@@ -37,20 +35,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 taskDeleted.addEventListener("click" , function(){
-
+alert(arrayTask[1].id);
+let id=arrayTask[1].id;
+alert(taskCheckbox.id(id));
 });
     checkboxSelectAll.addEventListener("click" , function(){
-        arrayTask.forEach((element, i) => {
-        if(arrayTask[i].isChecked===false){
-            arrayTask[i].isChecked=true;
-            
-
-        }
-        else{
-            arrayTask[i].isChecked=false;
-        }
-
-            alert(arrayTask[i].isChecked);
+        arrayTask.forEach(element => {
+            let id=arrayTask.id;
+        arrayTask.isChecked=true;
+        
         
 
         });
