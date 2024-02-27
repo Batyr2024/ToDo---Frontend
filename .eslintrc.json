@@ -1,27 +1,12 @@
 {
-    "parserOptions": {
-        "ecmaVersion": 8,
-        "sourceType": "module"
-    },
     "env": {
-        "es6": true,
         "browser": true,
-        "node": true
+        "es2021": true
     },
-    "extends": [
-        "eslint:recommended",
-        "google"
-    ],
+    "extends": "airbnb-base",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
     "rules": {
-        "no-console": [
-            "error",
-            {
-                "allow": [
-                    "warn",
-                    "error",
-                    "log"
-                ]
-            }
-        ]
     }
 }
