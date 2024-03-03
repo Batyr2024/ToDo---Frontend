@@ -6,15 +6,29 @@
   const taskDeleted = document.getElementById('taskDeleted');
   const checkboxSelectAll = document.getElementById('checkboxSelectAll');
   const idGlobalArray = { id: 1 };
-  const actual = { actual: 'all' };
+  const actual = { actual: 'all', selectPage: 1 };
   const spanAll = document.getElementById('spanAll');
   const spanActive = document.getElementById('spanActive');
   const spanCompleted = document.getElementById('spanCompleted');
   const pAll = document.getElementById('pAll');
   const pActive = document.getElementById('pActive');
   const pCompleted = document.getElementById('pCompleted');
+  const paginationDiv = document.getElementById('pagination');
   const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+  function addPage(lengthArray) {
+    let length = 0;
+    if (actual.actual === 'all') { length = arrayTask.length; } else { length = lengthArray; }
+    const page = Math.ceil(length / 5);
+    let listHtml = '';
+    for (let i = 0; page > i; i++) {
+      listHtml += ` 
+      <a href="#" id=${String(i + 1)}>${String(i + 1)}</a>
+      `;
+    }
+    paginationDiv.innerHTML = '';
+    paginationDiv.innerHTML += listHtml;
+  }
   function counter() {
     spanAll.textContent = '0';
     spanActive.textContent = '0';
@@ -31,7 +45,11 @@
     spanAll.textContent = '0';
     spanActive.textContent = '0';
     let listHtml = '';
-    arrayTask.forEach((element) => {
+    addPage();
+    const endIndex = actual.selectPage * 5;
+    const startIndex = endIndex - 5;
+    const arrayTaskPage = arrayTask.slice(startIndex, endIndex);
+    arrayTaskPage.forEach((element) => {
       const idCheckbox = element.id;
       const taskText = element.text;
       listHtml += `
@@ -48,7 +66,13 @@
   function showActive() {
     actual.actual = 'active';
     let listHtml = '';
-    arrayTask.forEach((element) => {
+    let arrayTaskPage = arrayTask.filter((value) => value.isChecked === false);
+    const lengthArray = arrayTaskPage.length;
+    addPage(lengthArray);
+    const endIndex = actual.selectPage * 5;
+    const startIndex = endIndex - 5;
+    arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
+    arrayTaskPage.forEach((element) => {
       const idCheckbox = element.id;
       const taskText = element.text;
       if (element.isChecked === false) {
@@ -68,7 +92,13 @@
   function showCompleted() {
     actual.actual = 'complete';
     let listHtml = '';
-    arrayTask.forEach((element) => {
+    let arrayTaskPage = arrayTask.filter((value) => value.isChecked === true);
+    const lengthArray = arrayTaskPage.length;
+    addPage(lengthArray);
+    const endIndex = actual.selectPage * 5;
+    const startIndex = endIndex - 5;
+    arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
+    arrayTaskPage.forEach((element) => {
       const idCheckbox = element.id;
       const taskText = element.text;
       if (element.isChecked === true) {
@@ -83,6 +113,10 @@
     });
     taskList.innerHTML = '';
     taskList.innerHTML += listHtml;
+  }
+  function selectPage(event) {
+    actual.selectPage = Number(event.target.id);
+    if (actual.actual === 'complete') { showCompleted(); } else if (actual.actual === 'active') { showActive(); } else { render(); }
   }
   function handleAddTask() {
     const taskText = taskInput.value.trim();
@@ -200,4 +234,6 @@
   pAll.addEventListener('click', render);
   pActive.addEventListener('click', showActive);
   pCompleted.addEventListener('click', showCompleted);
+  paginationDiv.addEventListener('click', selectPage);
 })();
+
