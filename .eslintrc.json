@@ -7,10 +7,5 @@
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "rules": {
-        "no-plusplus": "off",
-        "max-len": ["error",{"code": 150}],
-        "operator-linebreak": "off",
-        "no-alert": "off"
-    }
+    "rules": {}
 }

@@ -1,9 +1,28 @@
-
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 body {
   text-align: center;
   margin: 10;
   font-family: Verdana, Arial, sans-serif;
   font-size: 16px;
+}
+.container-add{
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  vertical-align:bottom;
+  align-items: center;
+}
+.container-delete{
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  cursor: pointer;
+  vertical-align:bottom;
+  align-items: center;
 }
 input {
   display: inline-block;
@@ -14,8 +33,6 @@ input {
   font-size: 16px;
 }
 button{
-  
-  display: inline-block;
   margin: 1px auto;
   border: 2px solid #eee;
   padding: 10px 20px;
@@ -23,7 +40,9 @@ button{
   font-size: 16px;
 }
 span{
-  max-width: 300;
+  max-width: 300px;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 ul {
   margin: auto;
@@ -31,7 +50,7 @@ ul {
   align-self: center;
   list-style-type: none;
   padding: 0;
-  width: 500px;
+  width: 400px;
 }
 
 li {
@@ -41,8 +60,7 @@ li {
   padding: 8px 0;
 }
 p{
-
-margin: 10px;
+margin: 20px;
 align-self:center;
 }
 .delete{
@@ -52,32 +70,30 @@ align-self:center;
 }
 .checkbox{
 margin: 2px;
-  align-items: center;
   cursor: pointer;
-}
-.taskDeleted{
-display: inline-block;
-  margin: 1px auto;
-  border: 2px solid #b10e0e;
-  padding: 10px 20px;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 16px;
 }
 .container-process{
-  display: inline-block;
+  display: flex;
   cursor: pointer;
   vertical-align:text-bottom;
-border: solid blue;
+  justify-content: space-between;
+  align-items: center;
+border: solid rgb(109, 109, 109);
 margin:10px;
-display: inline-flex;
 }
-.pagination {
-  display: inline-block;
+#pagination{
+  display: flex;
+  cursor: pointer;
+  vertical-align:text-bottom;
+  justify-content: space-between;
+  align-items: center;
+border: solid rgb(112, 112, 112);
 }
-
-.pagination a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
+.page{
+  align-items: center;
+  color:#313030;
+display:block;
+float:left;
+font-weight:bold;
+padding:3px 4px;
 }
