@@ -258,14 +258,15 @@
       if (element.id === itemId) {
         idGlobalArray = itemId;
         const listHtml = document.createElement('input');
-        listHtml.innerHTML = '<input id="task-Text" type="text" onBlur="alert">';
+        listHtml.innerHTML = '<input type="text" onBlur="alert">';
         listHtml.value = element.text;
+        listHtml.id = 'taskText';
         spanElement.replaceWith(listHtml);
       }
     });
   }
   function addChangeTasks() {
-    const taskListInput = document.getElementById('task-Text');
+    const taskListInput = document.getElementById('taskText');
     if (taskListInput === null) return;
     const taskText = taskListInput.value.trim();
     const index = arrayTask.findIndex((item) => item.id === idGlobalArray);
