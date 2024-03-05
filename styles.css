@@ -107,3 +107,6 @@ font-weight:bold;
 padding:3px 4px;
 background: #74a5e0;
 }
+.active-tab{
+  background: #74a5e0;
+}

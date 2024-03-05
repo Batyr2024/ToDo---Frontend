@@ -134,19 +134,43 @@
     counterPage();
     addPage(lengthArray);
   }
+  function backlightCurrentTab() {
+    switch (actualTab) {
+      case 'all':
+        pAll.className = 'active-tab';
+        pActive.className = '';
+        pCompleted.className = '';
+        break;
+      case 'active':
+        pAll.className = '';
+        pActive.className = 'active-tab';
+        pCompleted.className = '';
+        break;
+      case 'complete':
+        pAll.className = '';
+        pActive.className = '';
+        pCompleted.className = 'active-tab';
+        break;
+      default:
+        break;
+    }
+  }
   function tabAll() {
     actualTab = 'all';
     selectPagination = maxPageAll;
+    backlightCurrentTab();
     render();
   }
   function tabActive() {
     actualTab = 'active';
     selectPagination = maxPageActive;
+    backlightCurrentTab();
     render();
   }
   function tabCompleted() {
     actualTab = 'complete';
     selectPagination = maxPageComplete;
+    backlightCurrentTab();
     render();
   }
   function selectPage(event) {
@@ -164,14 +188,11 @@
       isChecked: false,
     });
     switch (actualTab) {
-      case 'all':
-        selectPagination = Math.ceil(arrayTask.length / maxTaskPage);
+      case 'all': selectPagination = Math.ceil(arrayTask.length / maxTaskPage);
         break;
-      case 'active':
-        selectPagination = maxPageActive;
+      case 'active': selectPagination = maxPageActive;
         break;
-      default:
-        break;
+      default: break;
     }
     render();
     counter();
@@ -225,11 +246,9 @@
     counter();
   }
   function changeTasks(event) {
-    const itemId = Number(event.target.id.split('-')[1]);
+    const itemId = Number(event.target.id);
     const spanElement = document.querySelector(`#taskText-${itemId}`);
-    console.log(itemId);
     arrayTask.forEach((element) => {
-      console.log(element.id);
       if (element.id === itemId) {
         idGlobalArray = itemId;
         const listHtml = document.createElement('input');
@@ -260,11 +279,11 @@
 
   addTaskButton.addEventListener('click', handleAddTask);
   checkboxSelectAll.addEventListener('click', selectAllCheckboxTasks);
+  taskList.addEventListener('dblclick', changeTasks);
   taskList.addEventListener('click', checkboxClicksTasks);
   taskList.addEventListener('click', deleteThisTask);
   taskSelectedDeleted.addEventListener('click', deleteSelectTasks);
   taskInput.addEventListener('keyup', addTaskPressKey);
-  taskList.addEventListener('dblclick', changeTasks);
   taskList.addEventListener('keyup', addTaskPressKey);
   taskList.addEventListener('blur', addChangeTasks, true);
   pAll.addEventListener('click', tabAll);
