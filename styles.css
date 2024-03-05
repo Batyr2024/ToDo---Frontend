@@ -89,6 +89,7 @@ margin:10px;
   align-items: center;
 border: solid rgb(112, 112, 112);
 }
+
 .page{
   align-items: center;
   color:#313030;
@@ -96,4 +97,13 @@ display:block;
 float:left;
 font-weight:bold;
 padding:3px 4px;
+}
+.active-page{
+  align-items: center;
+  color:#313030;
+display:block;
+float:left;
+font-weight:bold;
+padding:3px 4px;
+background: #74a5e0;
 }
