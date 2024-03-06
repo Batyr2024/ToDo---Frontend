@@ -11,16 +11,17 @@
   const pActive = document.getElementById('pActive');
   const pCompleted = document.getElementById('pCompleted');
   const paginationDiv = document.getElementById('pagination');
+
   let maxPageAll = 1;
   let maxPageActive = 1;
   let maxPageComplete = 1;
   let selectPagination = 1;
+  let idGlobalArray = 1;
+  let arrayTask = [];
   let actualTab = 'all';
   const keyEnter = 'Enter';
   const keyEscape = 'Escape';
   const maxTaskPage = 5;
-  let idGlobalArray = 1;
-  let arrayTask = [];
   const { _ } = window;
 
   function addPage(lengthArray) {
@@ -92,7 +93,27 @@
         break;
     }
   }
-
+  function backlightCurrentTab() {
+    switch (actualTab) {
+      case 'all':
+        pAll.className = 'active-tab';
+        pActive.className = '';
+        pCompleted.className = '';
+        break;
+      case 'active':
+        pAll.className = '';
+        pActive.className = 'active-tab';
+        pCompleted.className = '';
+        break;
+      case 'complete':
+        pAll.className = '';
+        pActive.className = '';
+        pCompleted.className = 'active-tab';
+        break;
+      default:
+        break;
+    }
+  }
   function render() {
     const endIndex = selectPagination * maxTaskPage;
     const startIndex = endIndex - maxTaskPage;
@@ -124,37 +145,18 @@
       listHtml += `
   <li>
   <input class="checkbox" ${element.isChecked ? 'checked' : ''} id=${idCheckbox} type ="checkbox">
-  <span id="taskText-${idCheckbox}" >${_.escape(taskText)}</span>
+  <span class="span" id="taskText-${idCheckbox}" >${_.escape(taskText)}</span>
   <span id=${idCheckbox} class="delete">X</span>
   </li>
       `;
     });
     taskList.innerHTML += listHtml;
+    backlightCurrentTab();
     counter();
     counterPage();
     addPage(lengthArray);
   }
-  function backlightCurrentTab() {
-    switch (actualTab) {
-      case 'all':
-        pAll.className = 'active-tab';
-        pActive.className = '';
-        pCompleted.className = '';
-        break;
-      case 'active':
-        pAll.className = '';
-        pActive.className = 'active-tab';
-        pCompleted.className = '';
-        break;
-      case 'complete':
-        pAll.className = '';
-        pActive.className = '';
-        pCompleted.className = 'active-tab';
-        break;
-      default:
-        break;
-    }
-  }
+
   function tabAll() {
     actualTab = 'all';
     selectPagination = maxPageAll;
@@ -203,6 +205,7 @@
       const arrayElement = element;
       arrayElement.isChecked = event.target.checked;
     });
+    counterPage();
     render();
     counter();
   }
@@ -233,10 +236,10 @@
     if (elementClass === 'delete') {
       const index = arrayTask.findIndex((item) => item.id === Number(elementId));
       arrayTask.splice(index, 1);
+      counterPage();
+      render();
+      counter();
     }
-    counterPage();
-    render();
-    counter();
   }
   function deleteSelectTasks() {
     arrayTask = arrayTask.filter((value) => value.isChecked === false);
@@ -245,26 +248,28 @@
     checkboxSelectAll.checked = false;
     counter();
   }
-  function changeTasks(event) {
-    const itemId = Number(event.target.id);
-    const spanElement = document.querySelector(`#taskText-${itemId}`);
-    arrayTask.forEach((element) => {
-      if (element.id === itemId) {
-        idGlobalArray = itemId;
-        const listHtml = document.createElement('input');
-        listHtml.innerHTML = '<input type="text" onBlur="alert">';
-        listHtml.value = element.text;
-        listHtml.id = 'taskText';
-        spanElement.replaceWith(listHtml);
-      }
-    });
+  function taskChange(event) {
+    if (event.detail > 1) {
+      const itemId = Number(event.target.id.split('-')[1]);
+      const spanElement = document.querySelector(`#taskText-${itemId}`);
+      arrayTask.forEach((element) => {
+        if (element.id === itemId) {
+          idGlobalArray = itemId;
+          const listHtml = document.createElement('input');
+          listHtml.innerHTML = '<input type="text" onBlur="alert">';
+          listHtml.value = _.escape(element.text);
+          listHtml.id = 'taskText';
+          spanElement.replaceWith(listHtml);
+        }
+      });
+    }
   }
   function addChangeTasks() {
     const taskListInput = document.getElementById('taskText');
     if (taskListInput === null) return;
     const taskText = taskListInput.value.trim();
     const index = arrayTask.findIndex((item) => item.id === idGlobalArray);
-    arrayTask[index].text = taskText;
+    arrayTask[index].text = _.escape(taskText);
     render();
   }
   function addTaskPressKey(event) {
@@ -278,12 +283,12 @@
   }
 
   addTaskButton.addEventListener('click', handleAddTask);
-  checkboxSelectAll.addEventListener('click', selectAllCheckboxTasks);
-  taskList.addEventListener('dblclick', changeTasks);
-  taskList.addEventListener('click', checkboxClicksTasks);
-  taskList.addEventListener('click', deleteThisTask);
+  checkboxSelectAll.addEventListener('change', selectAllCheckboxTasks);
   taskSelectedDeleted.addEventListener('click', deleteSelectTasks);
   taskInput.addEventListener('keyup', addTaskPressKey);
+  taskList.addEventListener('click', taskChange);
+  taskList.addEventListener('change', checkboxClicksTasks);
+  taskList.addEventListener('click', deleteThisTask);
   taskList.addEventListener('keyup', addTaskPressKey);
   taskList.addEventListener('blur', addChangeTasks, true);
   pAll.addEventListener('click', tabAll);
