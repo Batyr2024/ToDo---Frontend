@@ -153,7 +153,7 @@ function backlightCurrentPage(maxPage,index){
     switch (event.target.id) {
       case 'spanAll':
         actualTab = 'all';
-        selectPagination = maxPageActive;
+        selectPagination = maxPageAll;
         break;
       case 'spanActive':
         actualTab = 'active';
@@ -161,7 +161,7 @@ function backlightCurrentPage(maxPage,index){
         break;
       case 'spanCompleted':
         actualTab = 'complete';
-        selectPagination = maxPageActive;
+        selectPagination = maxPageComplete;
         break;
       default: break;
     }
