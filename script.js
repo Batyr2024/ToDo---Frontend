@@ -7,9 +7,7 @@
   const spanAll = document.getElementById('spanAll');
   const spanActive = document.getElementById('spanActive');
   const spanCompleted = document.getElementById('spanCompleted');
-  const pAll = document.getElementById('pAll');
-  const pActive = document.getElementById('pActive');
-  const pCompleted = document.getElementById('pCompleted');
+  const process = document.getElementById('containerProcess');
   const paginationDiv = document.getElementById('pagination');
 
   let maxPageAll = 1;
@@ -23,32 +21,29 @@
   const keyEscape = 'Escape';
   const maxTaskPage = 5;
   const { _ } = window;
-
+  
+function backlightCurrentPage(maxPage,index){
+  let listHtml = '';
+  if (maxPage < selectPagination) {
+    listHtml += `<a href="#" class=${maxPage === index + 1 ? 'active-page' : 'page'} id=${String(index + 1)}>${String(index + 1)}</a>`;
+  } else {
+    listHtml += `<a href="#" class=${selectPagination === index + 1 ? 'active-page' : 'page'} id=${String(index + 1)}>${String(index + 1)}</a>`;
+  }
+  return listHtml;
+}
   function addPage(lengthArray) {
     const countPages = Math.ceil(lengthArray / maxTaskPage);
     let listHtml = '';
     for (let i = 0; countPages > i; i += 1) {
       switch (actualTab) {
         case 'all':
-          if (maxPageAll < selectPagination) {
-            listHtml += `<a href="#" class=${maxPageAll === i + 1 ? 'active-page' : 'page'} id=${String(i + 1)}>${String(i + 1)}</a>`;
-          } else {
-            listHtml += `<a href="#" class=${selectPagination === i + 1 ? 'active-page' : 'page'} id=${String(i + 1)}>${String(i + 1)}</a>`;
-          }
+          listHtml += backlightCurrentPage(maxPageAll,i);
           break;
         case 'active':
-          if (maxPageActive < selectPagination) {
-            listHtml += `<a href="#" class=${maxPageActive === i + 1 ? 'active-page' : 'page'} id=${String(i + 1)}>${String(i + 1)}</a>`;
-          } else {
-            listHtml += `<a href="#" class=${selectPagination === i + 1 ? 'active-page' : 'page'} id=${String(i + 1)}>${String(i + 1)}</a>`;
-          }
+          listHtml += backlightCurrentPage(maxPageActive,i);
           break;
         case 'complete':
-          if (maxPageComplete < selectPagination) {
-            listHtml += `<a href="#" class=${maxPageComplete === i + 1 ? 'active-page' : 'page'} id=${String(i + 1)}>${String(i + 1)}</a>`;
-          } else {
-            listHtml += `<a href="#" class=${selectPagination === i + 1 ? 'active-page' : 'page'} id=${String(i + 1)}>${String(i + 1)}</a>`;
-          }
+          listHtml += backlightCurrentPage(maxPageComplete,i);
           break;
         default: break;
       }
@@ -57,14 +52,14 @@
     paginationDiv.innerHTML += listHtml;
   }
   function counter() {
-    spanAll.textContent = '0';
-    spanActive.textContent = '0';
-    spanCompleted.textContent = '0';
+    spanAll.innerText = 'All:0';
+    spanActive.innerText = 'Active:0';
+    spanCompleted.innerText = 'Completed:0';
     const arrayActive = arrayTask.filter((value) => value.isChecked === false);
     const arrayCompleted = arrayTask.filter((value) => value.isChecked === true);
-    spanActive.textContent = String(arrayActive.length);
-    spanCompleted.textContent = String(arrayCompleted.length);
-    spanAll.textContent = String((arrayActive.length) + (arrayCompleted.length));
+    spanActive.innerText = `Active:${String(arrayActive.length)}`;
+    spanCompleted.innerText =`Completed:${String(arrayCompleted.length)}`;
+    spanAll.innerText = `All:${String((arrayActive.length) + (arrayCompleted.length))}`;
   }
   function counterPage() {
     let arrayTaskPage;
@@ -94,21 +89,18 @@
     }
   }
   function backlightCurrentTab() {
+    spanAll.className = '';
+    spanActive.className = '';
+    spanCompleted.className = '';
     switch (actualTab) {
       case 'all':
-        pAll.className = 'active-tab';
-        pActive.className = '';
-        pCompleted.className = '';
+        spanAll.className = 'active-tab';
         break;
       case 'active':
-        pAll.className = '';
-        pActive.className = 'active-tab';
-        pCompleted.className = '';
+        spanActive.className = 'active-tab';
         break;
       case 'complete':
-        pAll.className = '';
-        pActive.className = '';
-        pCompleted.className = 'active-tab';
+        spanCompleted.className = 'active-tab';
         break;
       default:
         break;
@@ -130,7 +122,7 @@
         arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
         break;
       case 'complete':
-        arrayTaskPage = arrayTask.filter((value) => value.isChecked === true);
+        arrayTaskPage = arrayTask.filter((value) => value.isChecked);
         lengthArray = arrayTaskPage.length;
         arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
         break;
@@ -157,22 +149,22 @@
     addPage(lengthArray);
   }
 
-  function tabAll() {
-    actualTab = 'all';
-    selectPagination = maxPageAll;
-    backlightCurrentTab();
-    render();
-  }
-  function tabActive() {
-    actualTab = 'active';
-    selectPagination = maxPageActive;
-    backlightCurrentTab();
-    render();
-  }
-  function tabCompleted() {
-    actualTab = 'complete';
-    selectPagination = maxPageComplete;
-    backlightCurrentTab();
+  function Tab(event) {
+    switch (event.target.id) {
+      case 'spanAll':
+        actualTab = 'all';
+        selectPagination = maxPageActive;
+        break;
+      case 'spanActive':
+        actualTab = 'active';
+        selectPagination = maxPageActive;
+        break;
+      case 'spanCompleted':
+        actualTab = 'complete';
+        selectPagination = maxPageActive;
+        break;
+      default: break;
+    }
     render();
   }
   function selectPage(event) {
@@ -186,7 +178,7 @@
     if (taskText === '') return;
     arrayTask.push({
       id: Date.now(),
-      text: taskText,
+      text: _.escape(taskText),
       isChecked: false,
     });
     switch (actualTab) {
@@ -213,21 +205,12 @@
     if (event.target.className === 'checkbox') {
       const elementId = Number(event.target.id);
       const index = arrayTask.findIndex((item) => item.id === elementId);
-      let checkedAllTrue = false;
       if (arrayTask[index].isChecked === false) {
         arrayTask[index].isChecked = true;
       } else {
         arrayTask[index].isChecked = false;
       } render();
-      for (let i = 0; i < arrayTask.length; i += 1) {
-        if (arrayTask[i].isChecked === false) {
-          checkedAllTrue = false; break;
-        } else { checkedAllTrue = true; }
-      }
-      if (checkedAllTrue === true) {
-        checkboxSelectAll.checked = true;
-      } else { checkboxSelectAll.checked = false; }
-      counter();
+      checkboxSelectAll.checked = arrayTask.every((item) => item.isChecked === true);
     }
   }
   function deleteThisTask(event) {
@@ -255,10 +238,12 @@
       arrayTask.forEach((element) => {
         if (element.id === itemId) {
           idGlobalArray = itemId;
-          const listHtml = document.createElement('input');
-          listHtml.innerHTML = '<input type="text" onBlur="alert">';
+          const listHtml = document.createElement('textarea');
+          listHtml.innerHTML = '';
           listHtml.value = _.escape(element.text);
           listHtml.id = 'taskText';
+          listHtml.wrap = 'soft';
+          listHtml.autofocus = 'on';
           spanElement.replaceWith(listHtml);
         }
       });
@@ -291,8 +276,6 @@
   taskList.addEventListener('click', deleteThisTask);
   taskList.addEventListener('keyup', addTaskPressKey);
   taskList.addEventListener('blur', addChangeTasks, true);
-  pAll.addEventListener('click', tabAll);
-  pActive.addEventListener('click', tabActive);
-  pCompleted.addEventListener('click', tabCompleted);
+  process.addEventListener('click',Tab);
   paginationDiv.addEventListener('click', selectPage);
 })();
