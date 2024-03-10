@@ -122,7 +122,7 @@ function backlightCurrentPage(maxPage,index){
         arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
         break;
       case 'complete':
-        arrayTaskPage = arrayTask.filter((value) => value.isChecked);
+        arrayTaskPage = arrayTask.filter((value) => value.isChecked === true);
         lengthArray = arrayTaskPage.length;
         arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
         break;
