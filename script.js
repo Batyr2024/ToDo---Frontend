@@ -55,8 +55,8 @@ function backlightCurrentPage(maxPage,index){
     spanAll.innerText = 'All:0';
     spanActive.innerText = 'Active:0';
     spanCompleted.innerText = 'Completed:0';
-    const arrayActive = arrayTask.filter((value) => value.isChecked === false);
-    const arrayCompleted = arrayTask.filter((value) => value.isChecked === true);
+    const arrayActive = arrayTask.filter((value) => !value.isChecked);
+    const arrayCompleted = arrayTask.filter((value) => value.isChecked);
     spanActive.innerText = `Active:${String(arrayActive.length)}`;
     spanCompleted.innerText =`Completed:${String(arrayCompleted.length)}`;
     spanAll.innerText = `All:${String((arrayActive.length) + (arrayCompleted.length))}`;
@@ -64,9 +64,9 @@ function backlightCurrentPage(maxPage,index){
   function counterPage() {
     let arrayTaskPage;
     maxPageAll = Math.ceil(arrayTask.length / maxTaskPage);
-    arrayTaskPage = arrayTask.filter((value) => value.isChecked === false);
+    arrayTaskPage = arrayTask.filter((value) => !value.isChecked);
     maxPageActive = Math.ceil(arrayTaskPage.length / maxTaskPage);
-    arrayTaskPage = arrayTask.filter((value) => value.isChecked === true);
+    arrayTaskPage = arrayTask.filter((value) => value.isChecked);
     maxPageComplete = Math.ceil(arrayTaskPage.length / maxTaskPage);
     switch (actualTab) {
       case 'all':
@@ -84,8 +84,7 @@ function backlightCurrentPage(maxPage,index){
           selectPagination = maxPageComplete;
         }
         break;
-      default:
-        break;
+      default:break;
     }
   }
   function backlightCurrentTab() {
@@ -102,8 +101,7 @@ function backlightCurrentPage(maxPage,index){
       case 'complete':
         spanCompleted.className = 'active-tab';
         break;
-      default:
-        break;
+      default:break;
     }
   }
   function render() {
@@ -117,17 +115,16 @@ function backlightCurrentPage(maxPage,index){
         lengthArray = arrayTask.length;
         break;
       case 'active':
-        arrayTaskPage = arrayTask.filter((value) => value.isChecked === false);
+        arrayTaskPage = arrayTask.filter((value) => !value.isChecked);
         lengthArray = arrayTaskPage.length;
         arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
         break;
       case 'complete':
-        arrayTaskPage = arrayTask.filter((value) => value.isChecked === true);
+        arrayTaskPage = arrayTask.filter((value) => value.isChecked);
         lengthArray = arrayTaskPage.length;
         arrayTaskPage = arrayTaskPage.slice(startIndex, endIndex);
         break;
-      default:
-        break;
+      default:break;
     }
     let listHtml = '';
     taskList.innerHTML = ' ';
@@ -210,7 +207,7 @@ function backlightCurrentPage(maxPage,index){
       } else {
         arrayTask[index].isChecked = false;
       } render();
-      checkboxSelectAll.checked = arrayTask.every((item) => item.isChecked === true);
+      checkboxSelectAll.checked = arrayTask.every((item) => item.isChecked);
     }
   }
   function deleteThisTask(event) {
@@ -225,7 +222,7 @@ function backlightCurrentPage(maxPage,index){
     }
   }
   function deleteSelectTasks() {
-    arrayTask = arrayTask.filter((value) => value.isChecked === false);
+    arrayTask = arrayTask.filter((value) => !value.isChecked);
     counterPage();
     render();
     checkboxSelectAll.checked = false;
