@@ -9,6 +9,7 @@ body {
   font-family: Verdana, Arial, sans-serif;
   font-size: 16px;
 }
+
 .container-add{
   display: flex;
   justify-content: space-between;
@@ -33,6 +34,7 @@ textarea {
   font-size: 16px;
   width: 300px;
   height: 28px;
+  max-height: 250px;
 }
 button{
   margin: 1px auto;
@@ -43,6 +45,7 @@ button{
 }
 span{
   max-width: 300px;
+  max-height: 300px;
   overflow-wrap: break-word;
   word-break: break-all;
   margin: 20px;
