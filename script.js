@@ -22,6 +22,17 @@
   const maxTaskPage = 5;
   const { _ } = window;
 
+  async function getTaskDataBase(...func) {
+    const result = await fetch('http://localhost:5000/tasks')
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((err) => {
+        alert(err);
+      });
+    arrayTask = result;
+    func.forEach((element) => element());
+  }
+
   function backlightCurrentPage(maxPage, index) {
     let listHtml = '';
     if (maxPage < selectPagination) {
@@ -51,6 +62,7 @@
     paginationDiv.innerHTML = '';
     paginationDiv.innerHTML += listHtml;
   }
+
   function counter() {
     spanAll.innerText = 'All:0';
     spanActive.innerText = 'Active:0';
@@ -170,17 +182,28 @@
       render();
     }
   }
-  function handleAddTask() {
+  async function handleAddTask() {
     const taskText = taskInput.value.trim();
     if (taskText === '' || taskText === null) {
       taskInput.value = '';
       return;
     }
-    arrayTask.push({
-      id: Date.now(),
+    const newTask = {
       text: taskText.replace(/\s+/g, ' ').trim(),
-      isChecked: false,
-    });
+    };
+    try {
+      await fetch('http://localhost:5000/tasks', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTask),
+      });
+    } catch (error) {
+      alert(error);
+    }
+
     switch (actualTab) {
       case 'all': selectPagination = Math.ceil(arrayTask.length / maxTaskPage);
         break;
@@ -192,16 +215,22 @@
         break;
       default: break;
     }
-    render();
-    counter();
+    getTaskDataBase(render, counter);
     taskInput.value = '';
   }
-  function selectAllCheckboxTasks(event) {
-    arrayTask.forEach((element) => {
-      const arrayElement = element;
-      arrayElement.isChecked = event.target.checked;
-    });
-    counterPage();
+  async function selectAllCheckboxTasks(event) {
+    try {
+      await fetch(`http://localhost:5000/tasks/?check=${event.target.checked}`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      alert(error);
+    }
+    getTaskDataBase(counterPage, render, counter);
     switch (actualTab) {
       case 'all':
         selectPagination = maxPageAll;
@@ -214,42 +243,57 @@
         break;
       default: break;
     }
-    render();
-    counter();
   }
-  function checkboxClicksTasks(event) {
+  async function checkboxClicksTasks(event) {
     if (event.target.className === 'checkbox') {
-      const elementId = Number(event.target.id);
-      const index = arrayTask.findIndex((item) => item.id === elementId);
-      if (arrayTask[index].isChecked === false) {
-        arrayTask[index].isChecked = true;
-      } else {
-        arrayTask[index].isChecked = false;
+      try {
+        await fetch(`http://localhost:5000/tasks/:id?id=${event.target.id}&check=${event.target.checked}`, {
+          method: 'PATCH',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (error) {
+        alert(error);
       }
-      counterPage();
-      render();
-      counter();
+      getTaskDataBase(counterPage, render, counter);
       checkboxSelectAll.checked = arrayTask.every((item) => item.isChecked);
     }
   }
-  function deleteThisTask(event) {
-    const elementClass = event.target.className;
-    const elementId = event.target.id;
-    if (elementClass === 'delete') {
-      const index = arrayTask.findIndex((item) => item.id === Number(elementId));
-      arrayTask.splice(index, 1);
-      counterPage();
-      render();
-      counter();
+  async function deleteThisTask(event) {
+    if (event.target.className === 'delete') {
+      try {
+        await fetch(`http://localhost:5000/tasks/:id?id=${event.target.id}`, {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (error) {
+        alert(error);
+      }
+      getTaskDataBase(counterPage, render, counter);
     }
   }
-  function deleteSelectTasks() {
-    arrayTask = arrayTask.filter((value) => !value.isChecked);
-    counterPage();
-    render();
+
+  async function deleteSelectTasks() {
+    try {
+      await fetch('http://localhost:5000/tasks/', {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      alert(error);
+    }
+    getTaskDataBase(counterPage, render, counter);
     checkboxSelectAll.checked = false;
-    counter();
   }
+
   function taskChange(event) {
     if (event.detail > 1) {
       render();
@@ -271,15 +315,27 @@
       });
     }
   }
-  function addChangeTasks() {
+
+  async function addChangeTasks() {
     const taskListInput = document.getElementById('taskText');
     const taskText = taskListInput.value.trim();
     if (taskText === '' || taskText === null) {
-      render();
+      getTaskDataBase(render);
     } else {
-      const index = arrayTask.findIndex((item) => item.id === idGlobalArray);
-      arrayTask[index].text = taskText.replace(/\s+/g, ' ').trim();
-      render();
+      const newTask = { text: taskText.replace(/\s+/g, ' ').trim() };
+      try {
+        await fetch(`http://localhost:5000/tasks?id=${idGlobalArray}`, {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newTask),
+        });
+      } catch (error) {
+        alert(error);
+      }
+      getTaskDataBase(render);
     }
   }
   function addTaskPressKey(event) {
@@ -289,11 +345,12 @@
         addChangeTasks();
         break;
       case keyEscape:
-        render();
+        getTaskDataBase(render);
         break;
       default: break;
     }
   }
+  getTaskDataBase(counterPage, render, counter);
 
   addTaskButton.addEventListener('click', handleAddTask);
   checkboxSelectAll.addEventListener('change', selectAllCheckboxTasks);
